@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawkeye Verify - Login</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #154a69;
+            --secondary-color: #1a459b;
+            --success-color: #c7bc23;
+            --danger-color: #e74c3c;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fffffd;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        /* Login Page Styles */
+        .login-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .login-content {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+        
+        .login-content img {
+            display: block;
+            margin: 0 auto 30px;
+            max-width: 150px;
+        }
+        
+        .input-div {
+            position: relative;
+            margin: 25px 0;
+        }
+        
+        .input-div .i {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: #2B3467;
+        }
+        
+        .input-div .div {
+            position: relative;
+        }
+        
+        .input {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+			background-image: linear-gradient(to right, #A08D00, #fffffd);
+            background-color: var(--primary-color);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .btn:hover {
+            background-color: #143a52;
+        }
+        
+        /* Navigation Styles */
+        .topnav {
+            background-color: #A08D00;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+        
+        .topnav a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        
+        .topnav a:hover {
+            background-color: #ddd;
+            color: black;
+        }
+        
+        .topnav a.active {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        .topnav .icon {
+            display: none;
+        }
+        
+        /* Facial Recognition Styles */
+        .camera-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin: 20px auto;
+            background-color: #222;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        #video {
+            width: 100%;
+            display: block;
+        }
+        
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .status-message {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        
+        /* Responsive Styles */
+        @media screen and (max-width: 768px) {
+            .topnav a:not(:first-child) {display: none;}
+            .topnav a.icon {
+                float: right;
+                display: block;
+            }
+            
+            .login-content {
+                padding: 20px;
+            }
+        }
+        
+        @media screen and (max-width: 768px) {
+            .topnav.responsive {position: relative;}
+            .topnav.responsive .icon {
+                position: absolute;
+                right: 0;
+                top: 0;
+            }
+            .topnav.responsive a {
+                float: none;
+                display: block;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Page -->
+    <div id="login-page" class="login-container">
+        <div class="login-content">
+            <form id="login-form">
+                <img src= "Images/Hawkeye.png">
+                <h2 class="title text-center mb-4">Welcome</h2>
+                <div class="input-div one">
+                    <div class="i">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Brave ID</h5>
+                        <input type="text" id="username" class="input" required>
+                        <span id="userspan" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="input-div pass">
+                    <div class="i"> 
+                        <i class="fas fa-lock"></i>
+                    </div>
+                    <div class="div">
+                        <h5>Course code</h5>
+                        <input type="password" id="passwd" class="input" required>
+                        <span id="passwordspan" class="text-danger"></span>
+                    </div>
+                </div>
+                <input type="submit" class="btn" value="Login" id="loginsubmit">
+                <div id="login-status" class="status-message mt-3"></div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Home Page (hidden by default) -->
+    <div id="home-page" style="display: none;">
+        <div class="topnav" id="myTopnav">
+            <a href="#" class="active" onclick="showPage('home-page')">Home</a>
+            <a href="#" onclick="showPage('attendance-page')">Attendance</a>
+            <a href="#" onclick="logout()">Logout</a>
+            <a href="javascript:void(0);" class="icon" onclick="toggleNav()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+
+        <section class="container py-5">
+            <div class="row">
+                <img class="img-fluid mx-auto d-block" src="Images/homeImg.png" alt="Home Image">
+            </div>
+        </section>
+    </div>
+
+    <!-- Attendance Page (hidden by default) -->
+    <div id="attendance-page" style="display: none;">
+        <div class="topnav" id="attendance-nav">
+            <a href="#" onclick="showPage('home-page')">Home</a>
+            <a href="#" class="active" onclick="showPage('attendance-page')">Attendance</a>
+            <a href="#" onclick="logout()">Logout</a>
+            <a href="javascript:void(0);" class="icon" onclick="toggleNav('attendance-nav')">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+
+        <main class="container py-5">
+            <form class="text-center">
+                <div class="icon mb-4">
+                    <img src="Images/attendence_img.png" alt="Attendance Icon" style="max-width: 100px;">
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control-lg px-4 w-100" id="attendanceUser" placeholder="Student Name" oninput="clearMessage()">
+                    <div id="attendance-message" class="mt-2 fw-semibold"></div>
+                </div>
+                <input type="button" class="btn" value="Confirm Attendance" onclick="confirmAttendance()">
+            </form>
+        </main>
+    </div>
+
+    <!-- Security Question Page (hidden by default) -->
+    <div id="security-page" style="display: none;">
+        <div class="topnav">
+            <a href="#" onclick="showPage('home-page')">Home</a>
+            <a href="#" onclick="showPage('attendance-page')">Attendance</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+
+        <main class="container py-5">
+            <form class="text-center">
+                <div class="icon mb-4">
+                    <img src="Images/Questionmark.png" alt="Question Mark Icon" style="max-width: 100px;">
+                </div>
+                <h2 class="title mb-4">What is your father's middle name?</h2>
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control-lg px-4 w-100" id="securityAnswer" placeholder="Security Answer" oninput="clearError()">
+                    <div id="error-message" class="text-danger mt-2" style="display: none;"></div>
+                </div>
+
+                <input type="button" class="btn" value="Proceed" onclick="verifySecurityAnswer()">
+            </form>
+        </main>
+    </div>
+
+    <!-- Facial Recognition Page (hidden by default) -->
+    <div id="facial-recognition-page" style="display: none;">
+        <div class="topnav">
+            <a href="#" onclick="showPage('home-page')">Home</a>
+            <a href="#" onclick="showPage('attendance-page')">Attendance</a>
+            <a href="#" onclick="logout()">Logout</a>
+        </div>
+
+        <div class="container py-5">
+            <h1 class="text-center mb-4">Hawkeye Verify Facial Recognition System</h1>
+            
+            <div class="camera-container">
+                <video id="video" width="100%" height="auto" autoplay playsinline></video>
+                <canvas id="canvas"></canvas>
+            </div>
+            
+            <div class="controls">
+                <button id="startBtn" class="btn" style="background-color: var(--success-color);">Start Camera</button>
+                <button id="stopBtn" class="btn" style="background-color: var(--danger-color);" disabled>Stop Camera</button>
+                <button id="captureBtn" class="btn" style="background-color: var(--secondary-color);" disabled>Capture Photo</button>
+            </div>
+            
+            <div id="statusMessage" class="status-message"></div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let stream = null;
+        
+        // DOM elements
+        const loginForm = document.getElementById('login-form');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const captureBtn = document.getElementById('captureBtn');
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const statusMessage = document.getElementById('status-message');
+        
+        // Page navigation functions
+        function showPage(pageId) {
+            document.querySelectorAll('div[id$="-page"]').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+            
+            if (pageId === 'facial-recognition-page') {
+                initializeCamera();
+            }
+        }
+        
+        function toggleNav(navId = 'myTopnav') {
+            const nav = document.getElementById(navId);
+            nav.classList.toggle('responsive');
+        }
+        
+        // Login functionality
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('passwd').value;
+            
+            // Simple validation
+            if (!username || !password) {
+                showStatus('Please enter both Brave ID and Course code', 'error', 'login-status');
+                return;
+            }
+            
+            
+            currentUser = {
+                username: username,
+                name: "John Doe", // This would come from backend
+                course: password
+            };
+            
+            showStatus('Login successful!', 'success', 'login-status');
+            
+            // Transition to home page after brief delay
+            setTimeout(() => {
+                showPage('security-page');
+            }, 1000);
+        });
+        
+        // Security question
+        function verifySecurityAnswer() {
+            const answer = document.getElementById('securityAnswer').value.trim();
+            const errorElement = document.getElementById('error-message');
+            
+            if (!answer) {
+                errorElement.textContent = "Please enter an answer.";
+                errorElement.style.display = "block";
+                return;
+            }
+            
+           
+            if (answer.toLowerCase() === "eric") {
+                errorElement.style.display = "none";
+                showPage('facial-recognition-page');
+            } else {
+                errorElement.textContent = "Invalid answer. Please try again.";
+                errorElement.style.display = "block";
+            }
+        }
+        
+        function clearError() {
+            document.getElementById('error-message').style.display = 'none';
+        }
+        
+        function clearMessage() {
+            document.getElementById('attendance-message').textContent = '';
+        }
+        
+        // Camera functions
+        async function initializeCamera() {
+            try {
+                const constraints = {
+                    video: {
+                        width: { ideal: 1280 },
+                        height: { ideal: 720 },
+                        facingMode: 'user'
+                    }
+                };
+                
+                stream = await navigator.mediaDevices.getUserMedia(constraints);
+                video.srcObject = stream;
+                
+                startBtn.disabled = true;
+                stopBtn.disabled = false;
+                captureBtn.disabled = false;
+                
+                showStatus('Camera started successfully', 'success');
+            } catch (err) {
+                console.error('Error starting camera:', err);
+                showStatus(`Error: ${err.message}`, 'error');
+            }
+        }
+        
+        async function stopCamera() {
+            if (stream) {
+                stream.getTracks().forEach(track => track.stop());
+                stream = null;
+                video.srcObject = null;
+                
+                const context = canvas.getContext('2d');
+                context.clearRect(0, 0, canvas.width, canvas.height);
+                
+                startBtn.disabled = false;
+                stopBtn.disabled = true;
+                captureBtn.disabled = true;
+                
+                showStatus('Camera stopped', 'success');
+            }
+        }
+        
+        function capturePhoto() {
+            if (!stream) return;
+            
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            
+            
+            const imageData = canvas.toDataURL('image/png');
+            
+            // For demo purposes, we'll just show a success message
+            showStatus('Face captured successfully! Verifying...', 'success');
+            
+            // Simulate verification delay
+            setTimeout(() => {
+                showStatus('Verification successful! Attendance recorded.', 'success');
+                
+                // After verification, return to attendance page
+                setTimeout(() => {
+                    showPage('attendance-page');
+                    document.getElementById('attendance-message').textContent = 'Attendance recorded for ' + currentUser.name;
+                    document.getElementById('attendance-message').style.color = 'green';
+                }, 1500);
+            }, 2000);
+        }
+        
+        // Status message helper
+        function showStatus(message, type, elementId = 'statusMessage') {
+            const element = document.getElementById(elementId);
+            element.textContent = message;
+            element.className = `status-message ${type}`;
+            element.style.display = 'block';
+            
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Logout function
+        function logout() {
+            currentUser = null;
+            if (stream) {
+                stopCamera();
+            }
+            showPage('login-page');
+            loginForm.reset();
+        }
+        
+        // Event listeners for camera controls
+        startBtn?.addEventListener('click', initializeCamera);
+        stopBtn?.addEventListener('click', stopCamera);
+        captureBtn?.addEventListener('click', capturePhoto);
+        
+        // Clean up on page unload
+        window.addEventListener('beforeunload', stopCamera);
+    </script>
+</body>
+</html>
